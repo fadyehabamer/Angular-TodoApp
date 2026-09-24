@@ -9,34 +9,39 @@ import { ZardInputDirective } from '@/shared/components/input';
   template: `
     <div class="flex flex-col sm:flex-row gap-4 mb-6">
       <div class="flex gap-2">
-        <z-button
+        <button z-button type="button"
           [zType]="filter() === 'all' ? 'default' : 'outline'"
+          [attr.aria-pressed]="filter() === 'all'"
           zSize="sm"
           (click)="filterChange.emit('all')"
         >
           All ({{ totalCount() }})
-        </z-button>
+        </button>
 
-        <z-button
+        <button z-button type="button"
           [zType]="filter() === 'active' ? 'default' : 'outline'"
+          [attr.aria-pressed]="filter() === 'active'"
           zSize="sm"
           (click)="filterChange.emit('active')"
         >
           Active ({{ activeCount() }})
-        </z-button>
+        </button>
 
-        <z-button
+        <button z-button type="button"
           [zType]="filter() === 'completed' ? 'default' : 'outline'"
+          [attr.aria-pressed]="filter() === 'completed'"
           zSize="sm"
           (click)="filterChange.emit('completed')"
         >
           Completed ({{ completedCount() }})
-        </z-button>
+        </button>
       </div>
 
       <div class="flex-1 max-w-md">
         <input
           z-input
+          type="search"
+          aria-label="Search todos"
           [value]="searchText()"
           (input)="onSearchInput($event)"
           placeholder="Search todos..."

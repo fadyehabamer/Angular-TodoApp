@@ -16,11 +16,12 @@ import { Todo, TodoFormValue } from '../../models/todo.model';
     <form (ngSubmit)="onSubmit()" class="space-y-6">
       <!-- Task Input -->
       <div class="space-y-2">
-        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+        <label for="todo-text" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
           Task Description
         </label>
         <input
           #inputEl
+          id="todo-text"
           z-input
           [(ngModel)]="text"
           name="text"
@@ -60,10 +61,10 @@ import { Todo, TodoFormValue } from '../../models/todo.model';
 
         <!-- Priority -->
         <div class="space-y-2">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <span id="todo-priority-label" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
             Priority
-          </label>
-          <div class="grid grid-cols-3 gap-2">
+          </span>
+          <div class="grid grid-cols-3 gap-2" role="radiogroup" aria-labelledby="todo-priority-label">
             @for (pri of ['low', 'medium', 'high']; track pri) {
               <label class="relative">
                 <input

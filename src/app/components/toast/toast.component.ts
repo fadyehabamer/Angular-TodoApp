@@ -8,7 +8,7 @@ import type { ZardIcon } from '@/shared/components/icon/icons';
   selector: 'app-toast',
   imports: [ZardButtonComponent, ZardIconComponent],
   template: `
-    <div class="fixed top-4 right-4 z-50 space-y-2">
+    <div class="fixed top-4 right-4 z-50 space-y-2" role="status" aria-live="polite">
       @for (toast of toastService.toasts(); track toast.id) {
         <div
           class="flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg border animate-in slide-in-from-right-2"
@@ -16,14 +16,15 @@ import type { ZardIcon } from '@/shared/components/icon/icons';
         >
           <z-icon [zType]="toastIcon(toast.type)" class="flex-shrink-0"></z-icon>
           <span class="flex-1">{{ toast.message }}</span>
-          <z-button
+          <button z-button type="button"
             zType="ghost"
             zSize="sm"
             (click)="toastService.remove(toast.id)"
+            aria-label="Dismiss notification"
             class="text-current hover:bg-black/10"
           >
             <z-icon zType="x"></z-icon>
-          </z-button>
+          </button>
         </div>
       }
     </div>

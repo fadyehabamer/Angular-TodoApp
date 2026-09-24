@@ -42,23 +42,25 @@ import { ZardIconComponent } from '@/shared/components/icon';
         }
       </div>
 
-      <z-button
+      <button z-button type="button"
         zType="ghost"
         zSize="sm"
         (click)="edit.emit(todo().id); $event.stopPropagation()"
+        [attr.aria-label]="'Edit ' + todo().text"
         class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
       >
         <z-icon zType="settings"></z-icon>
-      </z-button>
+      </button>
 
-      <z-button
+      <button z-button type="button"
         zType="ghost"
         zSize="sm"
         (click)="delete.emit(todo().id); $event.stopPropagation()"
+        [attr.aria-label]="'Delete ' + todo().text"
         class="text-gray-400 hover:text-red-600"
       >
         <z-icon zType="trash"></z-icon>
-      </z-button>
+      </button>
     </div>
   `,
   styles: [`

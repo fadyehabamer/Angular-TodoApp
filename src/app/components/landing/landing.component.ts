@@ -14,14 +14,14 @@ import { ZardCardComponent } from '@/shared/components/card';
         <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
           <h1 class="text-2xl font-bold text-gray-900 dark:text-white">TodoApp</h1>
           <div class="flex gap-2">
-            <z-button zType="outline" routerLink="/todos">
+            <a z-button zType="outline" routerLink="/todos">
               <z-icon zType="list-filter-plus" class="mr-2"></z-icon>
               My Todos
-            </z-button>
-            <z-button zType="default" routerLink="/add">
+            </a>
+            <a z-button zType="default" routerLink="/add">
               <z-icon zType="plus" class="mr-2"></z-icon>
               New Todo
-            </z-button>
+            </a>
           </div>
         </div>
       </header>
@@ -33,14 +33,14 @@ import { ZardCardComponent } from '@/shared/components/card';
           Manage your tasks effortlessly with our modern todo app. Organize by categories, set priorities, track progress, and achieve your goals.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <z-button zType="default" class="px-8 py-4 text-lg" routerLink="/todos">
+          <a z-button zType="default" class="px-8 py-4 text-lg" routerLink="/todos">
             <z-icon zType="arrow-right" class="mr-2"></z-icon>
             Explore
-          </z-button>
-          <z-button zType="outline" class="px-8 py-4 text-lg" routerLink="/add">
+          </a>
+          <a z-button zType="outline" class="px-8 py-4 text-lg" routerLink="/add">
             <z-icon zType="plus" class="mr-2"></z-icon>
             Create First Todo
-          </z-button>
+          </a>
         </div>
       </section>
 
@@ -103,10 +103,10 @@ import { ZardCardComponent } from '@/shared/components/card';
         <z-card class="p-12 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
           <h3 class="text-3xl font-bold mb-4">Ready to Get Started?</h3>
           <p class="text-lg mb-8 opacity-90">Create your first todo and start organizing your life today.</p>
-          <z-button zType="default" class="px-8 py-3" routerLink="/add">
+          <a z-button zType="default" class="px-8 py-3" routerLink="/add">
             <z-icon zType="plus" class="mr-2"></z-icon>
             Create Your First Todo
-          </z-button>
+          </a>
         </z-card>
       </section>
 
