@@ -7,20 +7,23 @@ export class ThemeService {
   isDark = signal<boolean>(false);
 
   constructor() {
-    // Load from localStorage
     if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('theme');
+      const stored = readStoredTheme();
       if (stored) {
         this.isDark.set(stored === 'dark');
       } else {
-        // Check system preference
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        this.isDark.set(prefersDark);
+        // Fall back to the system preference. matchMedia is missing in some
+        // environments (e.g. jsdom, older embedded webviews).
+        this.isDark.set(window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false);
       }
 
-      // Save to localStorage
       effect(() => {
-        localStorage.setItem('theme', this.isDark() ? 'dark' : 'light');
+        const theme = this.isDark() ? 'dark' : 'light';
+        try {
+          localStorage.setItem('theme', theme);
+        } catch {
+          // Storage can be unavailable (privacy mode, quota); the theme still applies.
+        }
         document.documentElement.classList.toggle('dark', this.isDark());
       });
     }
@@ -28,5 +31,13 @@ export class ThemeService {
 
   toggle() {
     this.isDark.update(dark => !dark);
+  }
+}
+
+function readStoredTheme(): string | null {
+  try {
+    return localStorage.getItem('theme');
+  } catch {
+    return null;
   }
 }

@@ -4,7 +4,6 @@ import { TodoService, FilterType } from './services/todo.service';
 import { TodoItemComponent } from './components/todo-item/todo-item.component';
 import { TodoFiltersComponent } from './components/todo-filters/todo-filters.component';
 import { TodoSnackbarComponent } from './components/todo-snackbar/todo-snackbar.component';
-import { ToastComponent } from './components/toast/toast.component';
 import { Todo } from './models/todo.model';
 import { ZardCardComponent } from '@/shared/components/card';
 import { ZardButtonComponent } from '@/shared/components/button';
@@ -15,13 +14,12 @@ import { ToastService } from './services/toast.service';
 import { ThemeService } from './services/theme.service';
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-todo-list',
   imports: [
     RouterModule,
     TodoItemComponent,
     TodoFiltersComponent,
     TodoSnackbarComponent,
-    ToastComponent,
     ZardCardComponent,
     ZardButtonComponent,
     ZardIconComponent,
@@ -33,26 +31,27 @@ import { ThemeService } from './services/theme.service';
         <div class="flex justify-between items-center mb-8">
           <h1 class="text-3xl font-bold text-gray-900 dark:text-white">My Todos</h1>
           <div class="flex gap-2">
-            <z-button zType="outline" routerLink="/" title="Home">
+            <a z-button zType="outline" routerLink="/" title="Home" aria-label="Home">
               <z-icon zType="house"></z-icon>
-            </z-button>
-            <z-button zType="outline" (click)="showShortcuts()" title="Keyboard shortcuts">
+            </a>
+            <button z-button type="button" zType="outline" (click)="showShortcuts()" title="Keyboard shortcuts" aria-label="Keyboard shortcuts">
               <z-icon zType="info"></z-icon>
-            </z-button>
-            <z-button zType="default" (click)="goToAdd()">
+            </button>
+            <button z-button type="button" zType="default" (click)="goToAdd()">
               <z-icon zType="plus"></z-icon>
               Add Todo
-            </z-button>
-            <z-button zType="outline" (click)="goToAnalytics()">
+            </button>
+            <button z-button type="button" zType="outline" (click)="goToAnalytics()">
               <z-icon zType="layout-dashboard"></z-icon>
               Analytics
-            </z-button>
-            <z-button
+            </button>
+            <button z-button type="button"
               zType="outline"
               (click)="toggleTheme()"
+              [attr.aria-label]="themeService.isDark() ? 'Switch to light mode' : 'Switch to dark mode'"
             >
               <z-icon [zType]="themeService.isDark() ? 'sun' : 'moon'"></z-icon>
-            </z-button>
+            </button>
           </div>
         </div>
 
@@ -74,10 +73,10 @@ import { ThemeService } from './services/theme.service';
                 zDescription="Create your first todo to get started"
               >
                 <div class="flex justify-center pt-4">
-                  <z-button zType="default" routerLink="/add">
+                  <a z-button zType="default" routerLink="/add">
                     <z-icon zType="plus" class="mr-2"></z-icon>
                     Create Todo
-                  </z-button>
+                  </a>
                 </div>
               </z-empty>
             } @else {
@@ -106,8 +105,6 @@ import { ThemeService } from './services/theme.service';
           [visible]="showSnackbar()"
           (undo)="onUndoDelete()"
         ></app-todo-snackbar>
-
-        <app-toast></app-toast>
       </div>
     </div>
   `,

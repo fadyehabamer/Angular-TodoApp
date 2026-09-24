@@ -34,6 +34,9 @@
               "src/styles.css"
             ],
             "server": "src/main.server.ts",
+            "security": {
+              "allowedHosts": ["localhost"]
+            },
             "outputMode": "server",
             "ssr": {
               "entry": "src/server.ts"

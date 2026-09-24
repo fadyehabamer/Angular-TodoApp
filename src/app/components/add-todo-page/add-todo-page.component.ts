@@ -6,6 +6,7 @@ import { ToastService } from '../../services/toast.service';
 import { ZardCardComponent } from '@/shared/components/card';
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardIconComponent } from '@/shared/components/icon';
+import { TodoFormValue } from '../../models/todo.model';
 
 @Component({
   selector: 'app-add-todo-page',
@@ -14,14 +15,14 @@ import { ZardIconComponent } from '@/shared/components/icon';
     <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4 transition-colors">
       <div class="max-w-2xl mx-auto">
         <div class="mb-8 flex items-center gap-4">
-          <z-button zType="outline" (click)="goBack()">
+          <button z-button type="button" zType="outline" (click)="goBack()" aria-label="Back to todos">
             <z-icon zType="arrow-left"></z-icon>
-          </z-button>
+          </button>
           <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Add New Todo</h1>
-          <z-button zType="outline" routerLink="/" class="ml-auto">
+          <a z-button zType="outline" routerLink="/" class="ml-auto">
             <z-icon zType="house"></z-icon>
             Home
-          </z-button>
+          </a>
         </div>
 
         <z-card class="p-8">
@@ -46,8 +47,8 @@ export class AddTodoPageComponent {
   private todoService = inject(TodoService);
   private toastService = inject(ToastService);
 
-  onAddTodo({ text, category, priority }: { text: string; category: string[]; priority: 'low' | 'medium' | 'high' }) {
-    this.todoService.addTodo(text, category, priority);
+  onAddTodo({ text, category, priority, dueDate }: TodoFormValue) {
+    this.todoService.addTodo(text, category, priority, dueDate);
     this.toastService.success('Todo added successfully!');
     setTimeout(() => {
       this.router.navigate(['/todos']);

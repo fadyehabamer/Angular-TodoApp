@@ -14,9 +14,9 @@ import { ZardButtonComponent } from '@/shared/components/button';
         <!-- Header -->
         <div class="mb-8 flex items-center justify-between">
           <div class="flex items-center gap-4">
-            <z-button zType="outline" (click)="goBack()">
+            <button z-button type="button" zType="outline" (click)="goBack()" aria-label="Back to todos">
               <z-icon zType="arrow-left"></z-icon>
-            </z-button>
+            </button>
             <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Analytics</h1>
           </div>
         </div>

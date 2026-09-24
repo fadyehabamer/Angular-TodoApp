@@ -7,7 +7,7 @@ import { ZardIconComponent } from '@/shared/components/icon';
 import { ZardSelectComponent } from '@/shared/components/select/select.component';
 import { ZardSelectItemComponent } from '@/shared/components/select/select-item.component';
 import { ZardDatePickerComponent } from '@/shared/components/date-picker/date-picker.component';
-import { Todo } from '../../models/todo.model';
+import { Todo, TodoFormValue } from '../../models/todo.model';
 
 @Component({
   selector: 'app-todo-form',
@@ -16,16 +16,16 @@ import { Todo } from '../../models/todo.model';
     <form (ngSubmit)="onSubmit()" class="space-y-6">
       <!-- Task Input -->
       <div class="space-y-2">
-        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+        <label for="todo-text" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
           Task Description
         </label>
         <input
           #inputEl
+          id="todo-text"
           z-input
           [(ngModel)]="text"
           name="text"
           placeholder="What needs to be done?"
-          (keydown.enter)="onSubmit()"
           (keydown.escape)="onCancel()"
           class="w-full"
           autocomplete="off"
@@ -61,10 +61,10 @@ import { Todo } from '../../models/todo.model';
 
         <!-- Priority -->
         <div class="space-y-2">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <span id="todo-priority-label" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
             Priority
-          </label>
-          <div class="grid grid-cols-3 gap-2">
+          </span>
+          <div class="grid grid-cols-3 gap-2" role="radiogroup" aria-labelledby="todo-priority-label">
             @for (pri of ['low', 'medium', 'high']; track pri) {
               <label class="relative">
                 <input
@@ -108,19 +108,21 @@ import { Todo } from '../../models/todo.model';
 
       <!-- Action Buttons -->
       <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
-        <z-button
-          type="button"
-          (click)="onSubmit()"
+        <!-- Enter in the text field and this button both submit the form via ngSubmit -->
+        <button
+          z-button
+          type="submit"
           [disabled]="!text.trim()"
           zType="default"
           class="flex-1 sm:flex-none"
         >
           <z-icon zType="plus" class="mr-2"></z-icon>
           {{ editing() ? 'Update Task' : 'Add Task' }}
-        </z-button>
+        </button>
 
         @if (editing()) {
-          <z-button
+          <button
+            z-button
             type="button"
             zType="outline"
             (click)="onCancel()"
@@ -128,7 +130,7 @@ import { Todo } from '../../models/todo.model';
           >
             <z-icon zType="x" class="mr-2"></z-icon>
             Cancel
-          </z-button>
+          </button>
         }
       </div>
     </form>
@@ -166,8 +168,8 @@ import { Todo } from '../../models/todo.model';
 })
 export class TodoFormComponent implements AfterViewInit, OnInit {
   editing = input<Todo | null>(null);
-  add = output<{ text: string; category: string[]; priority: 'low' | 'medium' | 'high' }>();
-  update = output<{ id: string; text: string; category: string[]; priority: 'low' | 'medium' | 'high' }>();
+  add = output<TodoFormValue>();
+  update = output<TodoFormValue & { id: string }>();
   cancel = output<void>();
 
   text: string = '';
@@ -175,7 +177,7 @@ export class TodoFormComponent implements AfterViewInit, OnInit {
   selectedPriority: 'low' | 'medium' | 'high' = 'medium';
 
   availableCategories = ['work', 'personal', 'shopping', 'health', 'fitness', 'learning', 'urgent', 'hobby'];
-  dueDate: string = '';
+  dueDate: Date | null = null;
   categoryIcon(cat: string): 'clipboard' | 'user' | 'tag' | 'heart' | 'zap' | 'book-open' | 'lightbulb' | 'star' {
     switch (cat) {
       case 'work': return 'clipboard';
@@ -204,34 +206,12 @@ export class TodoFormComponent implements AfterViewInit, OnInit {
       this.text = editingTodo.text;
       this.selectedCategories = Array.isArray(editingTodo.category) ? [...editingTodo.category] : [];
       this.selectedPriority = editingTodo.priority;
+      this.dueDate = editingTodo.dueDate ?? null;
     }
-  }
-
-  onTextInput(event: Event) {
-    this.text = (event.target as HTMLInputElement).value;
-  }
-
-  onCategoriesChange(categories: any) {
-    console.log('Categories changed:', categories);
-    this.selectedCategories = Array.isArray(categories) ? categories : [];
   }
 
   onCategoryChange(value: string | string[]) {
-    console.log('Category changed:', value);
     this.selectedCategories = Array.isArray(value) ? value : [];
-  }
-
-  onCategoryToggle(category: string) {
-    if (this.selectedCategories.includes(category)) {
-      this.selectedCategories = this.selectedCategories.filter(c => c !== category);
-    } else {
-      this.selectedCategories = [...this.selectedCategories, category];
-    }
-    console.log('Categories after toggle:', this.selectedCategories);
-  }
-
-  onPriorityChange(event: Event) {
-    this.selectedPriority = (event.target as HTMLSelectElement).value as 'low' | 'medium' | 'high';
   }
 
   onSubmit() {
@@ -240,7 +220,6 @@ export class TodoFormComponent implements AfterViewInit, OnInit {
       this.toastService.error('Todo text cannot be empty');
       return;
     }
-    console.log('Selected Categories:', this.selectedCategories);
     if (this.selectedCategories.length === 0) {
       this.toastService.error('Select at least one category');
       return;
@@ -250,11 +229,11 @@ export class TodoFormComponent implements AfterViewInit, OnInit {
         id: this.editing()!.id, 
         text: trimmed, 
         category: this.selectedCategories, 
-        priority: this.selectedPriority 
+        priority: this.selectedPriority,
+        dueDate: this.dueDate
       });
     } else {
-      console.log('Emitting add with categories:', this.selectedCategories);
-      this.add.emit({ text: trimmed, category: this.selectedCategories, priority: this.selectedPriority });
+      this.add.emit({ text: trimmed, category: this.selectedCategories, priority: this.selectedPriority, dueDate: this.dueDate });
     }
   }
 
@@ -262,6 +241,7 @@ export class TodoFormComponent implements AfterViewInit, OnInit {
     this.text = '';
     this.selectedCategories = [];
     this.selectedPriority = 'medium';
+    this.dueDate = null;
     this.cancel.emit();
   }
 }

@@ -1,59 +1,64 @@
 # TodoApp
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.3.
+A todo app built with Angular 21 (standalone components and signals), Tailwind CSS and
+[Zard UI](https://zardui.com) components, with server-side rendering via `@angular/ssr`.
 
-## Development server
+## Features
 
-To start a local development server, run:
+- Create, edit, complete and delete todos, with undo after deleting
+- Categories (multi-select), low/medium/high priority and an optional due date
+- Filter by status (all / active / completed) and search by text
+- Analytics page with completion rate and per-category progress
+- Light/dark theme that follows your system preference by default
+- Keyboard shortcuts on the todo list: <kbd>Ctrl/Cmd</kbd> + <kbd>Alt</kbd> + <kbd>N</kbd>
+  for a new todo, <kbd>Ctrl/Cmd</kbd> + <kbd>F</kbd> to focus search
+- Todos and the theme are saved in your browser's `localStorage`; there is no backend or account
 
-```bash
-ng serve
-```
+## Routes
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+| Path        | Page                     | Rendering   |
+| ----------- | ------------------------ | ----------- |
+| `/`         | Landing page             | Prerendered |
+| `/todos`    | Todo list                | Client      |
+| `/add`      | Add a todo               | Prerendered |
+| `/edit/:id` | Edit a todo              | Client      |
+| `/analytics` | Statistics             | Client      |
 
-## Code scaffolding
+Pages that show todos render in the browser only, because the data lives in `localStorage`.
+Unknown paths redirect to `/`.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Getting started
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Requires Node.js `^20.19.0 || ^22.12.0 || >=24.0.0` (Angular 21 requirement).
 
 ```bash
-ng test
+npm install
+npm start          # ng serve on http://localhost:4200/
 ```
 
-## Running end-to-end tests
+## Scripts
 
-For end-to-end (e2e) testing, run:
+| Command                     | Description                                              |
+| --------------------------- | -------------------------------------------------------- |
+| `npm start`                 | Development server with live reload                      |
+| `npm run build`             | Production build (browser + server bundles) in `dist/`   |
+| `npm test`                  | Unit tests with Vitest in jsdom (no browser needed)      |
+| `npm run serve:ssr:todo-app`| Serve the production build with the Node SSR server      |
+
+Use `npm test -- --watch=false` for a single run, for example in CI.
+
+## Deploying the SSR server
 
 ```bash
-ng e2e
+npm run build
+PORT=4000 npm run serve:ssr:todo-app
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Angular's SSR server only accepts requests whose `Host` header is allowed (protection against
+server-side request forgery). `localhost` is allowed in `angular.json`
+(`security.allowedHosts`). For a real domain, add it there or set the `NG_ALLOWED_HOSTS`
+environment variable to a comma-separated list, e.g. `NG_ALLOWED_HOSTS=todo.example.com`.
 
-## Additional Resources
+## License
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+[MIT](LICENSE)

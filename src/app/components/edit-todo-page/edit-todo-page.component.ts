@@ -6,7 +6,7 @@ import { ToastService } from '../../services/toast.service';
 import { ZardCardComponent } from '@/shared/components/card';
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardIconComponent } from '@/shared/components/icon';
-import { Todo } from '../../models/todo.model';
+import { Todo, TodoFormValue } from '../../models/todo.model';
 
 @Component({
   selector: 'app-edit-todo-page',
@@ -15,14 +15,14 @@ import { Todo } from '../../models/todo.model';
     <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4 transition-colors">
       <div class="max-w-2xl mx-auto">
         <div class="mb-8 flex items-center gap-4">
-          <z-button zType="outline" (click)="goBack()">
+          <button z-button type="button" zType="outline" (click)="goBack()" aria-label="Back to todos">
             <z-icon zType="arrow-left"></z-icon>
-          </z-button>
+          </button>
           <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Edit Todo</h1>
-          <z-button zType="outline" routerLink="/" class="ml-auto">
+          <a z-button zType="outline" routerLink="/" class="ml-auto">
             <z-icon zType="house"></z-icon>
             Home
-          </z-button>
+          </a>
         </div>
 
         <z-card class="p-8">
@@ -63,8 +63,8 @@ export class EditTodoPageComponent implements OnInit {
     }
   }
 
-  onUpdateTodo({ id, text, category, priority }: { id: string; text: string; category: string[]; priority: 'low' | 'medium' | 'high' }) {
-    this.todoService.updateTodo(id, { text, category, priority });
+  onUpdateTodo({ id, text, category, priority, dueDate }: TodoFormValue & { id: string }) {
+    this.todoService.updateTodo(id, { text, category, priority, dueDate });
     this.toastService.success('Todo updated successfully!');
     this.router.navigate(['/todos']);
   }

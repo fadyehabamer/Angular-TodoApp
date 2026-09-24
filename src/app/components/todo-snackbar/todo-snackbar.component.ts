@@ -8,14 +8,14 @@ import { ZardButtonComponent } from '@/shared/components/button';
     @if (visible()) {
       <div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-3 z-50">
         <span>{{ message() }}</span>
-        <z-button
+        <button z-button type="button"
           zType="ghost"
           zSize="sm"
           class="text-white hover:bg-gray-700"
           (click)="undo.emit()"
         >
           Undo
-        </z-button>
+        </button>
       </div>
     }
   `,

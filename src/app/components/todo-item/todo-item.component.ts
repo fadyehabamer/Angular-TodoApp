@@ -1,4 +1,5 @@
 import { Component, input, output, signal } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { Todo } from '../../models/todo.model';
 import { ZardCheckboxComponent } from '@/shared/components/checkbox';
 import { ZardButtonComponent } from '@/shared/components/button';
@@ -6,7 +7,7 @@ import { ZardIconComponent } from '@/shared/components/icon';
 
 @Component({
   selector: 'app-todo-item',
-  imports: [ZardCheckboxComponent, ZardButtonComponent, ZardIconComponent],
+  imports: [DatePipe, ZardCheckboxComponent, ZardButtonComponent, ZardIconComponent],
   template: `
     <div class="flex items-center gap-3 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all cursor-pointer group" (click)="onCheckboxClick()">
       <z-checkbox
@@ -34,25 +35,32 @@ import { ZardIconComponent } from '@/shared/components/icon';
               [class]="priorityClass(todo().priority)">
           {{ todo().priority }}
         </span>
+        @if (todo().dueDate; as due) {
+          <span class="inline-block mt-1 ml-2 px-2 py-1 text-xs rounded bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200">
+            Due {{ due | date: 'mediumDate' }}
+          </span>
+        }
       </div>
 
-      <z-button
+      <button z-button type="button"
         zType="ghost"
         zSize="sm"
         (click)="edit.emit(todo().id); $event.stopPropagation()"
+        [attr.aria-label]="'Edit ' + todo().text"
         class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
       >
         <z-icon zType="settings"></z-icon>
-      </z-button>
+      </button>
 
-      <z-button
+      <button z-button type="button"
         zType="ghost"
         zSize="sm"
         (click)="delete.emit(todo().id); $event.stopPropagation()"
+        [attr.aria-label]="'Delete ' + todo().text"
         class="text-gray-400 hover:text-red-600"
       >
         <z-icon zType="trash"></z-icon>
-      </z-button>
+      </button>
     </div>
   `,
   styles: [`
