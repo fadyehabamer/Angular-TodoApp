@@ -208,31 +208,8 @@ export class TodoFormComponent implements AfterViewInit, OnInit {
     }
   }
 
-  onTextInput(event: Event) {
-    this.text = (event.target as HTMLInputElement).value;
-  }
-
-  onCategoriesChange(categories: any) {
-    console.log('Categories changed:', categories);
-    this.selectedCategories = Array.isArray(categories) ? categories : [];
-  }
-
   onCategoryChange(value: string | string[]) {
-    console.log('Category changed:', value);
     this.selectedCategories = Array.isArray(value) ? value : [];
-  }
-
-  onCategoryToggle(category: string) {
-    if (this.selectedCategories.includes(category)) {
-      this.selectedCategories = this.selectedCategories.filter(c => c !== category);
-    } else {
-      this.selectedCategories = [...this.selectedCategories, category];
-    }
-    console.log('Categories after toggle:', this.selectedCategories);
-  }
-
-  onPriorityChange(event: Event) {
-    this.selectedPriority = (event.target as HTMLSelectElement).value as 'low' | 'medium' | 'high';
   }
 
   onSubmit() {
@@ -241,7 +218,6 @@ export class TodoFormComponent implements AfterViewInit, OnInit {
       this.toastService.error('Todo text cannot be empty');
       return;
     }
-    console.log('Selected Categories:', this.selectedCategories);
     if (this.selectedCategories.length === 0) {
       this.toastService.error('Select at least one category');
       return;
@@ -254,7 +230,6 @@ export class TodoFormComponent implements AfterViewInit, OnInit {
         priority: this.selectedPriority 
       });
     } else {
-      console.log('Emitting add with categories:', this.selectedCategories);
       this.add.emit({ text: trimmed, category: this.selectedCategories, priority: this.selectedPriority });
     }
   }
