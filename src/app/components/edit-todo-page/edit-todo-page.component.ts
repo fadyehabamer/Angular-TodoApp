@@ -6,7 +6,7 @@ import { ToastService } from '../../services/toast.service';
 import { ZardCardComponent } from '@/shared/components/card';
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardIconComponent } from '@/shared/components/icon';
-import { Todo } from '../../models/todo.model';
+import { Todo, TodoFormValue } from '../../models/todo.model';
 
 @Component({
   selector: 'app-edit-todo-page',
@@ -63,8 +63,8 @@ export class EditTodoPageComponent implements OnInit {
     }
   }
 
-  onUpdateTodo({ id, text, category, priority }: { id: string; text: string; category: string[]; priority: 'low' | 'medium' | 'high' }) {
-    this.todoService.updateTodo(id, { text, category, priority });
+  onUpdateTodo({ id, text, category, priority, dueDate }: TodoFormValue & { id: string }) {
+    this.todoService.updateTodo(id, { text, category, priority, dueDate });
     this.toastService.success('Todo updated successfully!');
     this.router.navigate(['/todos']);
   }

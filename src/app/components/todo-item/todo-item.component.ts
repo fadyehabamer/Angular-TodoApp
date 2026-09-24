@@ -1,4 +1,5 @@
 import { Component, input, output, signal } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { Todo } from '../../models/todo.model';
 import { ZardCheckboxComponent } from '@/shared/components/checkbox';
 import { ZardButtonComponent } from '@/shared/components/button';
@@ -6,7 +7,7 @@ import { ZardIconComponent } from '@/shared/components/icon';
 
 @Component({
   selector: 'app-todo-item',
-  imports: [ZardCheckboxComponent, ZardButtonComponent, ZardIconComponent],
+  imports: [DatePipe, ZardCheckboxComponent, ZardButtonComponent, ZardIconComponent],
   template: `
     <div class="flex items-center gap-3 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all cursor-pointer group" (click)="onCheckboxClick()">
       <z-checkbox
@@ -34,6 +35,11 @@ import { ZardIconComponent } from '@/shared/components/icon';
               [class]="priorityClass(todo().priority)">
           {{ todo().priority }}
         </span>
+        @if (todo().dueDate; as due) {
+          <span class="inline-block mt-1 ml-2 px-2 py-1 text-xs rounded bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200">
+            Due {{ due | date: 'mediumDate' }}
+          </span>
+        }
       </div>
 
       <z-button

@@ -6,6 +6,7 @@ import { ToastService } from '../../services/toast.service';
 import { ZardCardComponent } from '@/shared/components/card';
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardIconComponent } from '@/shared/components/icon';
+import { TodoFormValue } from '../../models/todo.model';
 
 @Component({
   selector: 'app-add-todo-page',
@@ -46,8 +47,8 @@ export class AddTodoPageComponent {
   private todoService = inject(TodoService);
   private toastService = inject(ToastService);
 
-  onAddTodo({ text, category, priority }: { text: string; category: string[]; priority: 'low' | 'medium' | 'high' }) {
-    this.todoService.addTodo(text, category, priority);
+  onAddTodo({ text, category, priority, dueDate }: TodoFormValue) {
+    this.todoService.addTodo(text, category, priority, dueDate);
     this.toastService.success('Todo added successfully!');
     setTimeout(() => {
       this.router.navigate(['/todos']);

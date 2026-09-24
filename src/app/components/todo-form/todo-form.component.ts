@@ -7,7 +7,7 @@ import { ZardIconComponent } from '@/shared/components/icon';
 import { ZardSelectComponent } from '@/shared/components/select/select.component';
 import { ZardSelectItemComponent } from '@/shared/components/select/select-item.component';
 import { ZardDatePickerComponent } from '@/shared/components/date-picker/date-picker.component';
-import { Todo } from '../../models/todo.model';
+import { Todo, TodoFormValue } from '../../models/todo.model';
 
 @Component({
   selector: 'app-todo-form',
@@ -167,8 +167,8 @@ import { Todo } from '../../models/todo.model';
 })
 export class TodoFormComponent implements AfterViewInit, OnInit {
   editing = input<Todo | null>(null);
-  add = output<{ text: string; category: string[]; priority: 'low' | 'medium' | 'high' }>();
-  update = output<{ id: string; text: string; category: string[]; priority: 'low' | 'medium' | 'high' }>();
+  add = output<TodoFormValue>();
+  update = output<TodoFormValue & { id: string }>();
   cancel = output<void>();
 
   text: string = '';
@@ -176,7 +176,7 @@ export class TodoFormComponent implements AfterViewInit, OnInit {
   selectedPriority: 'low' | 'medium' | 'high' = 'medium';
 
   availableCategories = ['work', 'personal', 'shopping', 'health', 'fitness', 'learning', 'urgent', 'hobby'];
-  dueDate: string = '';
+  dueDate: Date | null = null;
   categoryIcon(cat: string): 'clipboard' | 'user' | 'tag' | 'heart' | 'zap' | 'book-open' | 'lightbulb' | 'star' {
     switch (cat) {
       case 'work': return 'clipboard';
@@ -205,6 +205,7 @@ export class TodoFormComponent implements AfterViewInit, OnInit {
       this.text = editingTodo.text;
       this.selectedCategories = Array.isArray(editingTodo.category) ? [...editingTodo.category] : [];
       this.selectedPriority = editingTodo.priority;
+      this.dueDate = editingTodo.dueDate ?? null;
     }
   }
 
@@ -227,10 +228,11 @@ export class TodoFormComponent implements AfterViewInit, OnInit {
         id: this.editing()!.id, 
         text: trimmed, 
         category: this.selectedCategories, 
-        priority: this.selectedPriority 
+        priority: this.selectedPriority,
+        dueDate: this.dueDate
       });
     } else {
-      this.add.emit({ text: trimmed, category: this.selectedCategories, priority: this.selectedPriority });
+      this.add.emit({ text: trimmed, category: this.selectedCategories, priority: this.selectedPriority, dueDate: this.dueDate });
     }
   }
 
@@ -238,6 +240,7 @@ export class TodoFormComponent implements AfterViewInit, OnInit {
     this.text = '';
     this.selectedCategories = [];
     this.selectedPriority = 'medium';
+    this.dueDate = null;
     this.cancel.emit();
   }
 }

@@ -27,6 +27,7 @@ function loadTodos(): Todo[] {
     .filter((t): t is Partial<Record<keyof Todo, any>> => !!t && typeof t === 'object' && typeof t.text === 'string')
     .map(t => {
       const createdAt = new Date(t.createdAt ?? Date.now());
+      const dueDate = t.dueDate ? new Date(t.dueDate) : null;
       return {
         id: typeof t.id === 'string' && t.id ? t.id : crypto.randomUUID(),
         text: t.text,
@@ -35,7 +36,8 @@ function loadTodos(): Todo[] {
         category: Array.isArray(t.category)
           ? t.category.filter((c: unknown): c is string => typeof c === 'string')
           : typeof t.category === 'string' && t.category ? [t.category] : [],
-        priority: PRIORITIES.includes(t.priority) ? t.priority : 'medium'
+        priority: PRIORITIES.includes(t.priority) ? t.priority : 'medium',
+        dueDate: dueDate && !isNaN(dueDate.getTime()) ? dueDate : null
       };
     });
 }
@@ -97,7 +99,12 @@ export class TodoService {
   }
 
   // CRUD operations
-  addTodo(text: string, category: string[], priority: 'medium' | 'low' | 'high' = 'medium'): void {
+  addTodo(
+    text: string,
+    category: string[],
+    priority: 'medium' | 'low' | 'high' = 'medium',
+    dueDate: Date | null = null
+  ): void {
     const trimmed = text.trim();
     if (!trimmed) {
       return;
@@ -108,12 +115,13 @@ export class TodoService {
       completed: false,
       createdAt: new Date(),
       category: Array.isArray(category) ? category.map(c => c.trim()).filter(Boolean) : [],
-      priority
+      priority,
+      dueDate
     };
     this.todosSignal.update(todos => [...todos, newTodo]);
   }
 
-  updateTodo(id: string, updates: Partial<Pick<Todo, 'text' | 'completed' | 'category' | 'priority'>>): void {
+  updateTodo(id: string, updates: Partial<Pick<Todo, 'text' | 'completed' | 'category' | 'priority' | 'dueDate'>>): void {
     this.todosSignal.update(todos =>
       todos.map(todo =>
         todo.id === id ? { ...todo, ...updates } : todo
