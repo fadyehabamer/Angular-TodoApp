@@ -25,7 +25,6 @@ import { Todo } from '../../models/todo.model';
           [(ngModel)]="text"
           name="text"
           placeholder="What needs to be done?"
-          (keydown.enter)="onSubmit()"
           (keydown.escape)="onCancel()"
           class="w-full"
           autocomplete="off"
@@ -108,19 +107,21 @@ import { Todo } from '../../models/todo.model';
 
       <!-- Action Buttons -->
       <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
-        <z-button
-          type="button"
-          (click)="onSubmit()"
+        <!-- Enter in the text field and this button both submit the form via ngSubmit -->
+        <button
+          z-button
+          type="submit"
           [disabled]="!text.trim()"
           zType="default"
           class="flex-1 sm:flex-none"
         >
           <z-icon zType="plus" class="mr-2"></z-icon>
           {{ editing() ? 'Update Task' : 'Add Task' }}
-        </z-button>
+        </button>
 
         @if (editing()) {
-          <z-button
+          <button
+            z-button
             type="button"
             zType="outline"
             (click)="onCancel()"
@@ -128,7 +129,7 @@ import { Todo } from '../../models/todo.model';
           >
             <z-icon zType="x" class="mr-2"></z-icon>
             Cancel
-          </z-button>
+          </button>
         }
       </div>
     </form>
