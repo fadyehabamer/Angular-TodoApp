@@ -4,7 +4,6 @@ import { TodoService, FilterType } from './services/todo.service';
 import { TodoItemComponent } from './components/todo-item/todo-item.component';
 import { TodoFiltersComponent } from './components/todo-filters/todo-filters.component';
 import { TodoSnackbarComponent } from './components/todo-snackbar/todo-snackbar.component';
-import { ToastComponent } from './components/toast/toast.component';
 import { Todo } from './models/todo.model';
 import { ZardCardComponent } from '@/shared/components/card';
 import { ZardButtonComponent } from '@/shared/components/button';
@@ -15,13 +14,12 @@ import { ToastService } from './services/toast.service';
 import { ThemeService } from './services/theme.service';
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-todo-list',
   imports: [
     RouterModule,
     TodoItemComponent,
     TodoFiltersComponent,
     TodoSnackbarComponent,
-    ToastComponent,
     ZardCardComponent,
     ZardButtonComponent,
     ZardIconComponent,
@@ -107,8 +105,6 @@ import { ThemeService } from './services/theme.service';
           [visible]="showSnackbar()"
           (undo)="onUndoDelete()"
         ></app-todo-snackbar>
-
-        <app-toast></app-toast>
       </div>
     </div>
   `,
