@@ -11,4 +11,6 @@ export const appRoutes: Routes = [
   addTodoRoute,
   editTodoRoute,
   analyticsRoute,
+  // Unknown URLs go back to the landing page instead of rendering a blank screen.
+  { path: '**', redirectTo: '' },
 ];
