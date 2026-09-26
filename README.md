@@ -1,5 +1,7 @@
 # TodoApp
 
+[![CI](https://github.com/fadyehabamer/Angular-TodoApp/actions/workflows/ci.yml/badge.svg)](https://github.com/fadyehabamer/Angular-TodoApp/actions/workflows/ci.yml)
+
 A todo app built with Angular 21 (standalone components and signals), Tailwind CSS and
 [Zard UI](https://zardui.com) components, with server-side rendering via `@angular/ssr`.
 
